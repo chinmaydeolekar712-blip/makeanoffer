@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BargainOS — Merchant</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="topbar">
+        <div class="brand">
+          <strong>BargainOS</strong>
+          <span>Merchant dashboard</span>
+        </div>
+        <nav>
+          <a href="/">Cart</a>
+          <a class="active" href="/merchant.html">Merchant</a>
+        </nav>
+      </header>
+
+      <h1>Bargaining rules</h1>
+      <p class="lede">
+        Set the eligible-cart threshold, maximum discount, and products that must stay at full price.
+        Saved rules apply to the next customer offer immediately.
+      </p>
+
+      <div class="grid">
+        <form class="card" id="settings-form">
+          <label class="field">
+            Minimum eligible cart subtotal ($)
+            <input id="min-cart" name="minCartSubtotal" type="number" min="0" step="0.01" required />
+          </label>
+          <label class="field">
+            Maximum discount (%)
+            <input id="max-discount" name="maxDiscountPercent" type="number" min="0" max="100" step="0.01" required />
+          </label>
+          <p class="muted">Exclude products from bargaining</p>
+          <div class="exclusions" id="exclusions"></div>
+          <div class="actions">
+            <button type="submit">Save settings</button>
+          </div>
+        </form>
+
+        <aside class="card">
+          <h2>Live preview</h2>
+          <p class="muted">Based on the sample cart’s default quantities.</p>
+          <dl class="totals" id="preview"></dl>
+          <div id="save-status" class="result" hidden></div>
+        </aside>
+      </div>
+    </div>
+    <script src="/merchant.js"></script>
+  </body>
+</html>

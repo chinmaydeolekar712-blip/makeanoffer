@@ -1,0 +1,8 @@
+{
+  "minCartSubtotal": 250,
+  "maxDiscountPercent": 15,
+  "excludedProductIds": [
+    "gift-card",
+    "sale-vase"
+  ]
+}

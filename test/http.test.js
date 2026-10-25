@@ -34,7 +34,7 @@ describe("Public Widget Configuration & CORS", () => {
     const data = await res.json();
     assert.equal(data.ok, true);
     assert.equal(data.site_id, "site_demo_wholesaler");
-    assert.equal(data.min_cart_subtotal, 500);
+    assert.equal(data.min_cart_subtotal, 300);
     assert.equal(data.max_discount_percent, 15);
     assert.equal(data.secret_key, undefined); // Never leak secrets!
   });

@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Prevent flash of wrong theme -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("bargainos_theme");
+          if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Automated Cart Bargaining for Online Wholesalers &mdash; BargainOS Guide</title>
     <meta name="description" content="In-depth guide to automated bulk discount negotiation and cart-level price negotiation for independent wholesalers selling packaging supplies, shipping materials, and standardized bulk goods." />
@@ -75,6 +85,10 @@
       </div>
       <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; WHOLESALE GUIDE</div>
       <div class="nav-links">
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Switch theme" title="Toggle light/dark mode">
+          <span class="theme-toggle-icon">☀️</span>
+          <span class="theme-toggle-label">Light Mode</span>
+        </button>
         <a class="nav-item" href="/merchant.html">Merchant Portal</a>
       </div>
     </header>
@@ -196,5 +210,6 @@
         &copy; 2026 BargainOS SaaS &middot; Educational Resource for Independent Wholesale Distributors
       </div>
     </footer>
+    <script src="/theme.js"></script>
   </body>
 </html>

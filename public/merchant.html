@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BargainOS &mdash; Merchant Control Portal</title>
+    <!-- Prevent flash of wrong theme -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("bargainos_theme");
+          if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
     <!-- Google Fonts Trinity -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +24,7 @@
     <link rel="stylesheet" href="/styles.css" />
     <style>
       .admin-auth-bar {
-        background: #0f172a;
+        background: var(--surface-card);
         border: 1px solid var(--hairline);
         padding: 16px 24px;
         margin-bottom: 32px;
@@ -28,6 +38,7 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        flex-wrap: wrap;
       }
       .key-table {
         width: 100%;
@@ -40,12 +51,20 @@
         font-family: var(--font-mono);
         font-size: 13px;
         text-align: left;
+        color: var(--body-strong);
+      }
+      .key-table th {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
       }
       .tab-nav {
         display: flex;
         gap: 8px;
         border-bottom: 1px solid var(--hairline);
         margin-bottom: 28px;
+        flex-wrap: wrap;
       }
       .tab-btn {
         background: transparent;
@@ -58,10 +77,15 @@
         text-transform: uppercase;
         padding: 12px 18px;
         cursor: pointer;
+        transition: color 0.2s ease;
+        margin-bottom: -1px;
       }
       .tab-btn.active {
         color: var(--on-dark);
         border-bottom-color: var(--on-dark);
+      }
+      .tab-btn:hover:not(.active) {
+        color: var(--body);
       }
       .token-alert {
         background: #064e3b;
@@ -72,6 +96,40 @@
         margin-bottom: 20px;
         font-family: var(--font-mono);
         font-size: 13px;
+      }
+      /* Discount number input styled to match slider aesthetic */
+      .discount-number-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .discount-number-input {
+        width: 90px;
+        padding: 10px 12px;
+        font-family: var(--font-mono);
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--on-dark);
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid var(--hairline-strong);
+        border-radius: 0;
+        transition: border-color 0.2s ease;
+        -moz-appearance: textfield;
+      }
+      .discount-number-input:focus {
+        outline: none;
+        border-bottom-color: var(--on-dark);
+      }
+      .discount-number-input::-webkit-outer-spin-button,
+      .discount-number-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .discount-unit {
+        font-family: var(--font-mono);
+        font-size: 22px;
+        color: var(--muted);
       }
     </style>
   </head>
@@ -86,6 +144,15 @@
       </div>
       <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; MERCHANT PORTAL</div>
       <div class="nav-links">
+        <button
+          class="theme-toggle-btn"
+          id="theme-toggle"
+          aria-label="Switch theme"
+          title="Toggle light/dark mode"
+        >
+          <span class="theme-toggle-icon">☀️</span>
+          <span class="theme-toggle-label">Light Mode</span>
+        </button>
         <a class="nav-item active" href="/merchant.html">Portal</a>
       </div>
     </header>
@@ -95,7 +162,7 @@
       <section class="admin-auth-bar">
         <div>
           <span style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;">Merchant Site ID:</span>
-          <strong style="color: #60a5fa; font-family: var(--font-mono); margin-left: 8px;" id="disp-site-id">site_demo_wholesaler</strong>
+          <strong style="color: var(--link); font-family: var(--font-mono); margin-left: 8px;" id="disp-site-id">site_demo_wholesaler</strong>
         </div>
         <div class="admin-input-wrap">
           <label style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase;">Admin Secret Key:</label>
@@ -103,7 +170,7 @@
             type="password"
             id="admin-secret-input"
             class="form-control"
-            style="width: 260px; height: 36px; padding: 6px 12px; font-size: 13px;"
+            style="width: 260px; height: 36px;"
             value="demo_admin_secret_key_2026"
             placeholder="Enter Admin Secret Token"
           />
@@ -115,45 +182,96 @@
 
       <!-- Tabs -->
       <div class="tab-nav">
-        <button class="tab-btn active" data-tab="tab-rules">Store Pricing Rules</button>
-        <button class="tab-btn" data-tab="tab-keys">API Key Credentials</button>
-        <button class="tab-btn" data-tab="tab-offers">Recent Offers Log</button>
+        <button class="tab-btn active" data-tab="tab-rules" id="tab-btn-rules">Bargaining Rules</button>
+        <button class="tab-btn" data-tab="tab-keys" id="tab-btn-keys">API Key Credentials</button>
+        <button class="tab-btn" data-tab="tab-offers" id="tab-btn-offers">Recent Offers Log</button>
       </div>
 
-      <!-- Tab 1: Rules & Settings -->
+      <!-- Tab 1: Bargaining Rules & Settings -->
       <div class="tab-content" id="tab-rules">
         <div class="layout-grid">
           <form class="seller-form" id="settings-form">
-            <h2 style="font-size: 22px; letter-spacing: 2px; margin-bottom: 24px;">Store Pricing Rules</h2>
+            <h2 style="font-size: 22px; letter-spacing: 2px; margin-bottom: 6px;">Bargaining Rules</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 32px;">
+              Configure the rules that govern when and how customers can make offers on their cart.
+              Changes take effect immediately after saving.
+            </p>
 
-            <div class="form-group">
-              <label class="form-label" for="min-cart">Minimum Cart Qualification Subtotal ($)</label>
-              <input id="min-cart" name="minCartSubtotal" class="form-input-text" type="number" min="0" step="0.01" required />
-              <span class="form-hint">Shoppers cannot negotiate unless their cart subtotal reaches this wholesale volume minimum (e.g., $500.00).</span>
+            <!-- Slider: Minimum Cart Value -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label class="slider-label" for="min-cart-slider">Minimum Cart Value</label>
+                <span class="slider-value-display" id="slider-value-display">$300</span>
+              </div>
+              <div class="slider-fill-track">
+                <input
+                  id="min-cart-slider"
+                  class="bargain-slider"
+                  type="range"
+                  min="1"
+                  max="1000"
+                  step="1"
+                  value="300"
+                  aria-label="Minimum cart value threshold in dollars"
+                />
+              </div>
+              <div class="slider-bounds">
+                <span class="slider-bound-label">$1</span>
+                <span class="slider-bound-label">$1,000</span>
+              </div>
+              <span class="form-hint" style="margin-top: 12px; display: block;">
+                Customers cannot negotiate unless their cart subtotal reaches this wholesale volume minimum.
+              </span>
+              <!-- Hidden number input keeps the value for form submission -->
+              <input type="hidden" id="min-cart" name="minCartSubtotal" value="300" />
             </div>
 
+            <!-- Maximum Discount Percentage -->
             <div class="form-group">
-              <label class="form-label" for="max-discount">Maximum Acceptable Discount (%)</label>
-              <input id="max-discount" name="maxDiscountPercent" class="form-input-text" type="number" min="0" max="100" step="0.01" required />
-              <span class="form-hint">Sets the hard floor. Any customer counter-offer below this floor will be automatically rejected.</span>
+              <div class="slider-header" style="margin-bottom: 10px;">
+                <label class="slider-label" for="max-discount">Maximum Discount</label>
+              </div>
+              <div class="discount-number-wrap">
+                <input
+                  id="max-discount"
+                  name="maxDiscountPercent"
+                  class="discount-number-input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value="15"
+                  required
+                />
+                <span class="discount-unit">%</span>
+              </div>
+              <span class="form-hint" style="margin-top: 10px; display: block;">
+                Hard floor — any offer below
+                <strong id="floor-formula-hint">Cart &times; (1 &minus; %/100)</strong>
+                is automatically rejected.
+              </span>
             </div>
 
+            <!-- Permitted Origins -->
             <div class="form-group">
               <label class="form-label" for="permitted-origins">Permitted Widget Domains (CORS Whitelist)</label>
-              <input id="permitted-origins" name="permittedOrigins" class="form-input-text" type="text" placeholder='http://localhost:3000, https://yourstore.com' />
+              <input id="permitted-origins" name="permittedOrigins" class="form-input-text" type="text" placeholder="http://localhost:3000, https://yourstore.com" />
               <span class="form-hint">Comma-separated list of web origins allowed to query this site's widget configuration.</span>
             </div>
 
-            <div style="margin-top: 32px;">
-              <button type="submit" class="btn-primary" style="width: auto; padding: 14px 36px;">
-                Save Pricing Rules
+            <div style="margin-top: 32px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+              <button type="submit" class="btn-primary" id="btn-save-rules" style="width: auto; padding: 14px 36px;">
+                Save Bargaining Rules
               </button>
+              <span id="unsaved-indicator" style="font-family: var(--font-mono); font-size: 11px; color: var(--warning); letter-spacing: 1px; opacity: 0; transition: opacity 0.3s ease;">
+                ● UNSAVED CHANGES
+              </span>
             </div>
           </form>
 
           <!-- Live Preview -->
           <aside class="summary-card">
-            <h2 class="summary-title">Live Rule Simulation</h2>
+            <h2 class="summary-title">Live Rule Preview</h2>
             <div class="spec-cell-list">
               <div class="spec-cell">
                 <span class="spec-cell-label">Min Threshold</span>
@@ -164,17 +282,20 @@
                 <span class="spec-cell-val" id="prev-discount">0%</span>
               </div>
               <div class="spec-cell">
-                <span class="spec-cell-label">Sample Wholesale Cart</span>
-                <span class="spec-cell-val money" id="prev-sample-cart">$540.00</span>
-              </div>
-              <div class="spec-cell">
-                <span class="spec-cell-label">Status</span>
+                <span class="spec-cell-label">Sample Cart ($540)</span>
                 <span class="spec-cell-val" id="prev-status">Evaluating...</span>
               </div>
-              <div class="spec-cell" style="padding-top: 18px;">
+              <div class="spec-cell" style="padding-top: 18px; border-top: 2px solid var(--hairline-strong);">
                 <span class="spec-cell-label" style="color: var(--on-dark);">Acceptance Floor</span>
-                <span class="spec-cell-val money" id="prev-floor" style="color: var(--on-dark); font-size: 18px;">$0.00</span>
+                <span class="spec-cell-val money" id="prev-floor" style="color: var(--on-dark); font-size: 20px;">$0.00</span>
               </div>
+            </div>
+
+            <!-- Formula explanation -->
+            <div style="margin-top: 24px; padding: 16px; background: var(--surface-soft); border: 1px solid var(--hairline); font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.8; letter-spacing: 0.5px;">
+              <div style="color: var(--on-dark); letter-spacing: 1.5px; margin-bottom: 8px; text-transform: uppercase;">Formula</div>
+              <div>Min Offer = Cart &times; (1 &minus; Discount%/100)</div>
+              <div id="formula-example" style="color: var(--success); margin-top: 6px;"></div>
             </div>
 
             <div id="save-status" class="status-callout ok" hidden style="margin-top: 24px;">
@@ -188,7 +309,7 @@
       <!-- Tab 2: API Keys -->
       <div class="tab-content" id="tab-keys" style="display: none;">
         <div class="seller-form" style="max-width: 880px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
             <div>
               <h2 style="font-size: 22px; letter-spacing: 2px; margin: 0 0 6px;">Server-to-Server API Keys</h2>
               <p style="font-size: 14px; color: var(--muted); margin: 0;">
@@ -259,6 +380,7 @@
       </div>
     </footer>
 
+    <script src="/theme.js"></script>
     <script src="/merchant.js"></script>
   </body>
 </html>

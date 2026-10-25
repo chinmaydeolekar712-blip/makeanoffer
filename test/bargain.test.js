@@ -126,3 +126,96 @@ describe("normalizeLineItems", () => {
     assert.equal(badQty.ok, false);
   });
 });
+
+describe("Automatic Bargaining Formula & $400 Example ($340 Floor)", () => {
+  const settings15 = { minCartSubtotal: 300, maxDiscountPercent: 15 };
+  const cart400 = [
+    { id: "box-bundle", name: "Boxes", quantity: 2, unitPrice: 200, lineTotal: 400 },
+  ]; // Total = $400
+
+  it("calculates minimum acceptable offer accurately via formula (cartSubtotal * (1 - maxDiscount/100))", () => {
+    // Formula: $400 * (1 - 15/100) = $340
+    assert.equal(minimumAcceptableCart(400, 15), 340);
+  });
+
+  it("automatically accepts offers at or above $340 for a $400 cart with 15% discount", () => {
+    const atFloor = evaluateOffer({
+      settings: settings15,
+      lines: cart400,
+      offeredTotal: 340,
+    });
+    assert.equal(atFloor.status, "accepted");
+    assert.equal(atFloor.accepted, true);
+    assert.equal(atFloor.minAcceptableCart, 340);
+    assert.equal(atFloor.savings, 60);
+    assert.equal(atFloor.discountPercent, 15);
+
+    const aboveFloor = evaluateOffer({
+      settings: settings15,
+      lines: cart400,
+      offeredTotal: 360,
+    });
+    assert.equal(aboveFloor.status, "accepted");
+    assert.equal(aboveFloor.accepted, true);
+    assert.equal(aboveFloor.savings, 40);
+    assert.equal(aboveFloor.discountPercent, 10);
+  });
+
+  it("automatically rejects offers below $340 for a $400 cart with 15% discount", () => {
+    const belowFloor = evaluateOffer({
+      settings: settings15,
+      lines: cart400,
+      offeredTotal: 339.99,
+    });
+    assert.equal(belowFloor.status, "rejected");
+    assert.equal(belowFloor.accepted, false);
+    assert.equal(belowFloor.minAcceptableCart, 340);
+    assert.match(belowFloor.message, /below the seller's minimum acceptable total of \$340\.00/i);
+
+    const farBelow = evaluateOffer({
+      settings: settings15,
+      lines: cart400,
+      offeredTotal: 250,
+    });
+    assert.equal(farBelow.status, "rejected");
+    assert.equal(farBelow.accepted, false);
+    assert.equal(farBelow.minAcceptableCart, 340);
+  });
+
+  it("enforces cart threshold and minimum acceptable offer as separate rules", () => {
+    // If cart is below minCartSubtotal (e.g. $250 < $300), bargaining is unavailable
+    const cart250 = [
+      { id: "box-bundle", name: "Boxes", quantity: 1, unitPrice: 250, lineTotal: 250 },
+    ];
+    const locked = evaluateOffer({
+      settings: settings15,
+      lines: cart250,
+      offeredTotal: 220,
+    });
+    assert.equal(locked.status, "unavailable");
+    assert.equal(locked.accepted, false);
+    assert.equal(locked.neededToUnlock, 50);
+  });
+});
+
+describe("Slider Boundaries & Default Settings ($1 to $1,000)", () => {
+  it("validates boundary conditions: minimum $1 and maximum $1,000", () => {
+    const min1 = validateSettings({ minCartSubtotal: 1, maxDiscountPercent: 15 });
+    assert.equal(min1.ok, true);
+    assert.equal(min1.settings.minCartSubtotal, 1);
+
+    const default300 = validateSettings({ minCartSubtotal: 300, maxDiscountPercent: 15 });
+    assert.equal(default300.ok, true);
+    assert.equal(default300.settings.minCartSubtotal, 300);
+
+    const max1000 = validateSettings({ minCartSubtotal: 1000, maxDiscountPercent: 15 });
+    assert.equal(max1000.ok, true);
+    assert.equal(max1000.settings.minCartSubtotal, 1000);
+  });
+
+  it("rejects negative minimum cart values", () => {
+    const negative = validateSettings({ minCartSubtotal: -5, maxDiscountPercent: 15 });
+    assert.equal(negative.ok, false);
+  });
+});
+

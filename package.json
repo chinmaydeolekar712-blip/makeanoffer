@@ -6,6 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "node server.js",
     "test": "node --test --test-concurrency=1 test/bargain.test.js test/integration.test.js test/http.test.js"
   },
   "engines": {

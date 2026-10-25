@@ -12,21 +12,21 @@
   --font-body: "Bugatti Text Regular", "Cormorant Garamond", "EB Garamond", Garamond, "Times New Roman", serif;
   --font-mono: "Bugatti Monospace", "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 
-  /* Bugatti Color Tokens */
+  /* Bugatti Color Tokens — Dark Mode (default) */
   --canvas: #000000;
   --surface-soft: #0d0d0d;
   --surface-card: #141414;
   --surface-elevated: #1f1f1f;
-  
+
   --hairline: #262626;
   --hairline-strong: #3a3a3a;
-  
+
   --on-dark: #ffffff;
   --body: #cccccc;
   --body-strong: #e6e6e6;
   --muted: #999999;
   --muted-soft: #666666;
-  
+
   --link: #c3d9f3;
   --warning: #d4a017;
   --success: #5fa657;
@@ -44,6 +44,29 @@
   --space-xl: 40px;
   --space-xxl: 64px;
   --space-section: 120px;
+}
+
+/* ==========================================================================
+   Light Mode Override — activated by data-theme="light" on <html>
+   ========================================================================== */
+[data-theme="light"] {
+  --canvas: #f8f8f6;
+  --surface-soft: #f0efec;
+  --surface-card: #ffffff;
+  --surface-elevated: #e8e7e3;
+
+  --hairline: #d4d2cc;
+  --hairline-strong: #bbb9b2;
+
+  --on-dark: #111111;
+  --body: #444444;
+  --body-strong: #222222;
+  --muted: #777777;
+  --muted-soft: #aaaaaa;
+
+  --link: #1a56a8;
+  --warning: #b45309;
+  --success: #2e7d32;
 }
 
 * {
@@ -1104,3 +1127,199 @@ td {
   }
 }
 
+/* ==========================================================================
+   Theme Toggle Button
+   ========================================================================== */
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  height: 32px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--on-dark);
+  color: var(--on-dark);
+}
+
+.theme-toggle-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Bargaining Rules Slider (Merchant Dashboard)
+   ========================================================================== */
+
+.slider-group {
+  margin-bottom: 36px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.slider-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+}
+
+.slider-value-display {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--on-dark);
+  letter-spacing: 1px;
+  transition: color 0.2s ease;
+}
+
+.slider-value-display.changed {
+  color: var(--success);
+}
+
+input[type="range"].bargain-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: var(--hairline-strong);
+  border: none;
+  border-radius: 1px;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 8px 0;
+  position: relative;
+}
+
+input[type="range"].bargain-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--on-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+  border: none;
+  box-shadow: 0 0 0 3px var(--canvas);
+}
+
+input[type="range"].bargain-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type="range"].bargain-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--on-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--canvas);
+  box-sizing: border-box;
+}
+
+.slider-bounds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.slider-bound-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted-soft);
+  text-transform: uppercase;
+}
+
+.slider-fill-track {
+  position: relative;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Form Control Input (auth bar input)
+   ========================================================================== */
+
+.form-control {
+  background: var(--surface-elevated);
+  border: 1px solid var(--hairline-strong);
+  color: var(--on-dark);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border-radius: 2px;
+  padding: 6px 12px;
+  transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Light Mode: key table & admin bar overrides
+   ========================================================================== */
+
+[data-theme="light"] .key-table th,
+[data-theme="light"] .key-table td {
+  border-bottom-color: var(--hairline);
+  color: var(--body-strong);
+}
+
+[data-theme="light"] .tab-btn {
+  color: var(--muted);
+}
+
+[data-theme="light"] .tab-btn.active {
+  color: var(--on-dark);
+  border-bottom-color: var(--on-dark);
+}
+
+[data-theme="light"] .token-alert {
+  background: #f0fdf4;
+  border-color: #22c55e;
+  color: #15803d;
+}
+
+[data-theme="light"] pre {
+  background: var(--surface-soft);
+  color: var(--body-strong);
+  border-color: var(--hairline);
+}
+
+[data-theme="light"] code {
+  background: var(--surface-elevated);
+  color: var(--body-strong);
+}
+
+/* Smooth theme transitions */
+html {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body, .top-nav, .seller-form, .summary-card, .dialog,
+.status-callout, .pricing-card, .faq-item, .table-wrap {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}

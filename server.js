@@ -109,7 +109,7 @@ function getActiveSiteSettings() {
       maxDiscountPercent: site.max_discount_percent,
     };
   }
-  return { minCartSubtotal: 500, maxDiscountPercent: 15 };
+  return { minCartSubtotal: 300, maxDiscountPercent: 15 };
 }
 
 function cartPreview(settings) {

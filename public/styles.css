@@ -1,115 +1,312 @@
+/* ==========================================================================
+   Bugatti Design System — "Make Your Offer" (BargainOS)
+   Reference: DESIGN.md inspired by Bugatti
+   Austere Luxury Automotive: Near-pure black canvas, wide letterspaced
+   Bugatti Display headlines, Bugatti Text Regular serif body, Bugatti Monospace
+   precision labels, and zero chrome/drop shadows.
+   ========================================================================== */
+
 :root {
-  --bg: #f6f4ef;
-  --surface: #fffdf9;
-  --ink: #1c1916;
-  --muted: #6b645c;
-  --line: #e4ddd3;
-  --accent: #1f6f5b;
-  --accent-ink: #f7fffb;
-  --danger: #9b2c2c;
-  --danger-bg: #fdecec;
-  --ok: #1f6f5b;
-  --ok-bg: #e7f5f0;
-  --warn: #8a5a12;
-  --warn-bg: #fff4e0;
-  --shadow: 0 18px 40px rgba(28, 25, 22, 0.08);
-  --radius: 16px;
-  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  /* Bugatti Typography Trinity */
+  --font-display: "Bugatti Display", "Saira Condensed", "Helvetica Neue", Helvetica, sans-serif;
+  --font-body: "Bugatti Text Regular", "Cormorant Garamond", "EB Garamond", Garamond, "Times New Roman", serif;
+  --font-mono: "Bugatti Monospace", "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Bugatti Color Tokens */
+  --canvas: #000000;
+  --surface-soft: #0d0d0d;
+  --surface-card: #141414;
+  --surface-elevated: #1f1f1f;
+  
+  --hairline: #262626;
+  --hairline-strong: #3a3a3a;
+  
+  --on-dark: #ffffff;
+  --body: #cccccc;
+  --body-strong: #e6e6e6;
+  --muted: #999999;
+  --muted-soft: #666666;
+  
+  --link: #c3d9f3;
+  --warning: #d4a017;
+  --success: #5fa657;
+
+  /* Geometry: 0px everywhere except pill buttons */
+  --radius-none: 0px;
+  --radius-pill: 9999px;
+
+  /* Spacing Scale */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-xxl: 64px;
+  --space-section: 120px;
 }
 
 * {
   box-sizing: border-box;
-}
-
-html,
-body {
   margin: 0;
-  min-height: 100%;
-  background: radial-gradient(circle at top left, #fff 0, var(--bg) 42%);
-  color: var(--ink);
+  padding: 0;
 }
 
-body {
+html, body {
+  min-height: 100%;
+  background-color: var(--canvas);
+  color: var(--body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base Headings & Links */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--on-dark);
 }
 
 a {
-  color: var(--accent);
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
 }
 
-.wrap {
-  width: min(1080px, calc(100% - 32px));
+a:hover {
+  opacity: 0.8;
+}
+
+.money {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Top Navigation (56px minimal transparent bar)
+   ========================================================================== */
+
+.top-nav {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--hairline);
+  background-color: var(--canvas);
+  position: relative;
+  z-index: 10;
+}
+
+.nav-item {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nav-item:hover {
+  opacity: 0.7;
+}
+
+.nav-item.active {
+  color: var(--on-dark);
+  border-bottom: 1px solid var(--on-dark);
+  padding-bottom: 2px;
+}
+
+.wordmark-display {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ==========================================================================
+   Hero Photographic Band (Full-Bleed Luxury Automotive)
+   ========================================================================== */
+
+.hero-band {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 64px 48px 48px;
+  background-color: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.hero-content {
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 24px 0 64px;
+  width: 100%;
 }
 
-.topbar {
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: clamp(32px, 5vw, 64px);
+  line-height: 1.1;
+  letter-spacing: 4px;
+  margin-bottom: 14px;
+}
+
+.hero-lead {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--body);
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Main Content Container
+   ========================================================================== */
+
+.page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 40px 120px;
+}
+
+/* ==========================================================================
+   Threshold Specification Meter (Engineered Precision)
+   ========================================================================== */
+
+.spec-meter-container {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  padding: 24px 32px;
+  margin-bottom: 48px;
+  border-radius: var(--radius-none);
+}
+
+.spec-meter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 
-.brand {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.brand strong {
-  font-size: 1.15rem;
-  letter-spacing: 0.04em;
-}
-
-.brand span,
-.muted {
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-nav {
-  display: flex;
-  gap: 8px;
-}
-
-nav a {
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 999px;
-  color: var(--ink);
-  background: transparent;
-}
-
-nav a.active,
-nav a:hover {
-  background: #efeae1;
-}
-
-h1 {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  margin: 0 0 8px;
-  letter-spacing: -0.03em;
-}
-
-.lede {
-  margin: 0 0 24px;
-  max-width: 62ch;
+.spec-meter-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
-.grid {
+.spec-meter-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+}
+
+.spec-meter-status.locked {
+  color: var(--warning);
+  border-color: rgba(212, 160, 23, 0.4);
+  background-color: rgba(212, 160, 23, 0.05);
+}
+
+.spec-meter-status.unlocked {
+  color: var(--success);
+  border-color: rgba(95, 166, 87, 0.5);
+  background-color: rgba(95, 166, 87, 0.08);
+}
+
+/* Precision Hairline Progress Gauge */
+.progress-track {
+  width: 100%;
+  height: 2px;
+  background-color: var(--hairline);
+  position: relative;
+  margin: 12px 0 16px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--warning);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+}
+
+.progress-bar.unlocked {
+  background-color: var(--on-dark);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+.spec-meter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.spec-meter-footer strong {
+  font-weight: 400;
+  color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Layout Grid: Catalog Selection & Order Summary
+   ========================================================================== */
+
+.layout-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr);
-  gap: 20px;
+  grid-template-columns: minmax(0, 1.8fr) minmax(340px, 1fr);
+  gap: 40px;
+  align-items: start;
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 20px;
+/* ==========================================================================
+   Table & Line Items (Austere Luxury Spec Sheet)
+   ========================================================================== */
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
 }
 
 table {
@@ -117,195 +314,608 @@ table {
   border-collapse: collapse;
 }
 
-th,
-td {
-  text-align: left;
-  padding: 12px 8px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: top;
-}
-
 th {
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
   color: var(--muted);
-  font-weight: 600;
+  text-align: left;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--hairline);
 }
 
-.product-name {
-  font-weight: 600;
+td {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
 }
 
-.product-desc {
-  display: block;
-  color: var(--muted);
-  font-size: 0.88rem;
-}
-
-.badge {
-  display: inline-block;
-  margin-top: 6px;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--warn-bg);
-  color: var(--warn);
-}
-
-.qty {
-  width: 72px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: #fff;
-  font: inherit;
-}
-
-.money {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.totals dt {
-  color: var(--muted);
-}
-
-.totals {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px 16px;
-  margin: 0;
-}
-
-.totals .grand {
-  font-weight: 700;
-  font-size: 1.05rem;
-  padding-top: 8px;
-  border-top: 1px solid var(--line);
-}
-
-label.field {
+.product-cell {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 16px;
-  font-weight: 600;
+  padding-right: 24px;
 }
 
-input[type="number"] {
-  font: inherit;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
+.product-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--on-dark);
 }
 
-.exclusions {
-  display: grid;
-  gap: 10px;
-  margin: 8px 0 18px;
+.product-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.4;
+  max-width: 48ch;
 }
 
-.exclusions label {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-weight: 500;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #fff;
+/* Stepper Quantity Control (Minimalist Machined Hairlines) */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+  background-color: var(--canvas);
 }
 
-button,
-.btn {
-  font: inherit;
+.stepper-btn {
+  background: transparent;
   border: 0;
+  color: var(--on-dark);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  width: 34px;
+  height: 38px;
   cursor: pointer;
-  border-radius: 999px;
-  padding: 12px 18px;
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-
-button.secondary {
-  background: #efeae1;
-  color: var(--ink);
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.actions {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.stepper-btn:hover {
+  background-color: var(--surface-card);
+}
+
+.stepper-input {
+  width: 44px;
+  height: 38px;
+  border: 0;
+  border-left: 1px solid var(--hairline);
+  border-right: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--on-dark);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.unit-price {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.line-total {
+  font-size: 16px;
+  color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Order Summary Card (Surface-Card #141414, 0px border-radius)
+   ========================================================================== */
+
+.summary-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-none);
+  padding: 36px 32px;
+  position: sticky;
+  top: 40px;
+}
+
+.summary-title {
+  font-size: 20px;
+  letter-spacing: 2px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.spec-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+}
+
+.spec-row dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.spec-row dd {
+  color: var(--body-strong);
+}
+
+.spec-row.total-row {
+  padding-top: 18px;
+  margin-top: 4px;
+  border-top: 1px solid var(--hairline);
+}
+
+.spec-row.total-row dt {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--on-dark);
+}
+
+.spec-row.total-row dd {
+  font-size: 22px;
+  color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Bugatti Primary Button (Transparent Pill with 1px White Outline)
+   ========================================================================== */
+
+.btn-primary {
+  width: 100%;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+  background-color: transparent;
+  color: var(--on-dark);
+  border: 1px solid var(--on-dark);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 14px 32px;
+  transition: all 0.25s ease;
+  text-decoration: none;
 }
 
-.result {
-  margin-top: 16px;
-  padding: 14px;
-  border-radius: 12px;
-  background: #efeae1;
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--on-dark);
+  color: var(--canvas);
 }
 
-.result.ok {
-  background: var(--ok-bg);
-  color: var(--ok);
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.99);
 }
 
-.result.bad {
-  background: var(--danger-bg);
-  color: var(--danger);
+.btn-primary:disabled {
+  border-color: var(--hairline-strong);
+  color: var(--muted-soft);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.result.warn {
-  background: var(--warn-bg);
-  color: var(--warn);
+.btn-secondary {
+  width: 100%;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--muted);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+
+.btn-secondary:hover {
+  border-color: var(--muted);
+  color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Alert / Status Messages (Quiet Precision)
+   ========================================================================== */
+
+.status-callout {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-none);
+  background-color: var(--surface-soft);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.status-callout.ok {
+  border-color: rgba(95, 166, 87, 0.4);
+  background-color: rgba(95, 166, 87, 0.06);
+  color: var(--body-strong);
+}
+
+.status-callout.ok .status-title {
+  color: var(--success);
+}
+
+.status-callout.bad {
+  border-color: rgba(225, 29, 72, 0.4);
+  background-color: rgba(225, 29, 72, 0.06);
+  color: var(--body-strong);
+}
+
+.status-callout.bad .status-title {
+  color: #ff6b81;
+}
+
+.status-callout.warn {
+  border-color: rgba(212, 160, 23, 0.4);
+  background-color: rgba(212, 160, 23, 0.06);
+  color: var(--body-strong);
+}
+
+.status-callout.warn .status-title {
+  color: var(--warning);
+}
+
+.status-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* ==========================================================================
+   Bargaining Modal (Black Canvas, 0px Radius, Hairline Borders)
+   ========================================================================== */
 
 .dialog-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(28, 25, 22, 0.4);
-  display: none;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 24px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .dialog-backdrop.open {
-  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .dialog {
-  width: min(420px, 100%);
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 22px;
-  box-shadow: var(--shadow);
+  width: min(500px, 100%);
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+  padding: 40px 36px;
+  transform: translateY(16px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (max-width: 800px) {
-  .grid {
+.dialog-backdrop.open .dialog {
+  transform: translateY(0);
+}
+
+.dialog-header {
+  margin-bottom: 24px;
+}
+
+.dialog-header h2 {
+  font-size: 26px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.dialog-header p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.modal-cart-recap {
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: 14px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-cart-recap span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.modal-cart-recap strong {
+  font-size: 18px;
+  color: var(--on-dark);
+}
+
+/* Quick Offer Chips */
+.quick-offers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.quick-btn {
+  background-color: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.quick-btn span {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.quick-btn:hover {
+  border-color: var(--on-dark);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Underline-Only Input Field (Bugatti Specification) */
+.input-group {
+  margin-bottom: 28px;
+}
+
+.input-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.currency-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.currency-input-wrap input {
+  width: 100%;
+  padding: 12px 0 12px 24px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--on-dark);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+  transition: border-color 0.2s ease;
+}
+
+.currency-input-wrap input:focus {
+  outline: none;
+  border-bottom-color: var(--on-dark);
+}
+
+.live-savings-hint {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--success);
+  min-height: 18px;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+/* ==========================================================================
+   Seller Dashboard Specifics (Austere Engineered Admin)
+   ========================================================================== */
+
+.seller-form {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  padding: 36px 32px;
+  border-radius: var(--radius-none);
+}
+
+.form-group {
+  margin-bottom: 32px;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  margin-bottom: 10px;
+}
+
+.form-hint {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.form-input-text {
+  width: 100%;
+  padding: 12px 0;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--on-dark);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+  transition: border-color 0.2s ease;
+}
+
+.form-input-text:focus {
+  outline: none;
+  border-bottom-color: var(--on-dark);
+}
+
+.spec-cell-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.spec-cell:last-child {
+  border-bottom: 0;
+}
+
+.spec-cell-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.spec-cell-val {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--on-dark);
+}
+
+/* Footer (Austere Pure Black) */
+.bugatti-footer {
+  border-top: 1px solid var(--hairline);
+  padding: 64px 40px;
+  background-color: var(--canvas);
+  text-align: center;
+}
+
+.footer-wordmark {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--muted-soft);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .layout-grid {
     grid-template-columns: 1fr;
   }
 
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
+  .hero-band {
+    padding: 60px 24px;
+    min-height: 380px;
   }
 
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
+  .top-nav {
+    padding: 0 20px;
+  }
+
+  .page-container {
+    padding: 40px 20px 80px;
+  }
+
+  .summary-card {
+    position: static;
+  }
+
+  table, thead, tbody, th, td, tr {
     display: block;
   }
 
@@ -314,20 +924,183 @@ button:disabled {
   }
 
   tr {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hairline);
   }
 
   td {
+    padding: 8px 0;
     border: 0;
-    padding: 4px 0;
   }
 
   td::before {
     content: attr(data-label);
     display: block;
-    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--muted-soft);
+    margin-bottom: 4px;
   }
 }
+
+/* ==========================================================================
+   Wholesale Value Proposition & Benefits Grid
+   ========================================================================== */
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px 24px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--body);
+}
+
+.benefit-bullet {
+  color: var(--on-dark);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.benefit-item strong {
+  color: var(--on-dark);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Pricing Component (Single Plan: $49/mo)
+   ========================================================================== */
+
+.pricing-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-none);
+  padding: 40px 36px;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pricing-features li {
+  font-size: 14px;
+  color: var(--body);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.pricing-features li::before {
+  content: "—";
+  font-family: var(--font-mono);
+  color: var(--on-dark);
+}
+
+.pricing-features li code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--link);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Accessible FAQ Accordion Component
+   ========================================================================== */
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-none);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.faq-item[open] {
+  border-color: var(--hairline-strong);
+}
+
+.faq-question {
+  padding: 20px 24px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::after {
+  content: "+";
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-question::after {
+  content: "−";
+}
+
+.faq-answer {
+  padding: 0 24px 24px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+@media (max-width: 640px) {
+  .top-nav {
+    height: auto;
+    padding: 14px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+  .wordmark-display {
+    font-size: 13px;
+    letter-spacing: 4px;
+  }
+  .pricing-card {
+    padding: 28px 20px;
+  }
+}
+

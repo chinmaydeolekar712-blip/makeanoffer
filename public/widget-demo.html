@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BargainOS &mdash; Custom Store Widget Demonstration</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .demo-container {
+        max-width: 960px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .mock-store-box {
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 8px;
+        padding: 32px;
+        margin-bottom: 32px;
+        color: #f3f4f6;
+      }
+      .code-preview {
+        background: #030712;
+        border: 1px solid #1f2937;
+        border-radius: 6px;
+        padding: 16px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: #93c5fd;
+        overflow-x: auto;
+        margin: 16px 0;
+      }
+      .mock-table {
+        width: 100%;
+        margin-top: 16px;
+        border-collapse: collapse;
+      }
+      .mock-table th, .mock-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #374151;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <header class="top-nav">
+      <div class="nav-links">
+        <a class="nav-item" href="/">Overview</a>
+        <a class="nav-item" href="/for-wholesalers">Wholesalers</a>
+        <a class="nav-item" href="/integrations.html">Integrations</a>
+      </div>
+      <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; WIDGET DEMO</div>
+      <div class="nav-links">
+        <a class="nav-item" href="/merchant.html">Merchant Portal</a>
+      </div>
+    </header>
+
+    <div class="demo-container">
+      <div class="page-header">
+        <h1 style="font-size: 32px; letter-spacing: 2px;">Widget Integration Demonstration</h1>
+        <p class="lede">
+          This page demonstrates how an independent wholesale website embeds the BargainOS widget script with a public Site ID to enable automated cart bargaining.
+        </p>
+      </div>
+
+      <!-- Installation Snippet Preview -->
+      <section style="margin-bottom: 36px;">
+        <h2 style="font-size: 18px; margin-bottom: 8px;">1. Embed Script Tag in Store Theme</h2>
+        <p style="font-size: 14px; color: var(--muted);">
+          Merchants paste this single script tag into their cart or checkout template. The <code>data-site-id</code> is public.
+        </p>
+        <pre class="code-preview">&lt;!-- BargainOS Automated Bargaining Widget --&gt;
+&lt;script src="http://localhost:3000/widget.js" data-site-id="site_demo_wholesaler" defer&gt;&lt;/script&gt;
+
+&lt;!-- Optional target container for in-page banner --&gt;
+&lt;div id="bargainos-widget-container" data-cart-total="540.00"&gt;&lt;/div&gt;</pre>
+      </section>
+
+      <!-- Mock Custom Wholesaler Cart -->
+      <div class="mock-store-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #374151; padding-bottom: 16px;">
+          <div>
+            <h2 style="font-size: 20px; color: #ffffff;">Pacific Industrial Packaging Co.</h2>
+            <span style="font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px;">Customer Cart #B2B-8924</span>
+          </div>
+          <span style="font-size: 12px; background: #065f46; color: #34d399; padding: 4px 10px; border-radius: 9999px;">Mock Wholesaler Cart</span>
+        </div>
+
+        <table class="mock-table">
+          <thead>
+            <tr>
+              <th>SKU Description</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th style="text-align: right;">Line Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Heavy-Duty Corrugated Boxes (Bundle of 25)</td>
+              <td>2</td>
+              <td>$180.00</td>
+              <td style="text-align: right;">$360.00</td>
+            </tr>
+            <tr>
+              <td>Pallet Stretch Wrap (Case of 4 Rolls)</td>
+              <td>1</td>
+              <td>$120.00</td>
+              <td style="text-align: right;">$120.00</td>
+            </tr>
+            <tr>
+              <td>Water-Activated Kraft Tape (Case of 10)</td>
+              <td>1</td>
+              <td>$65.00</td>
+              <td style="text-align: right;">$65.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px; font-size: 18px; font-weight: 600;">
+          Cart Subtotal: &nbsp;<span style="color: #60a5fa;" id="demo-subtotal-val">$545.00</span>
+        </div>
+
+        <!-- The BargainOS Widget is mounted here -->
+        <div style="margin-top: 28px;">
+          <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; margin-bottom: 10px;">
+            Embedded BargainOS Component:
+          </h3>
+          <div id="bargainos-widget-container" data-cart-total="545.00"></div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #374151; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: #9ca3af;">Simulate cart changes:</span>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary" style="padding: 6px 14px; font-size: 12px; height: 32px;" onclick="setDemoCart(350.00)">Set Cart to $350 (Under Min)</button>
+            <button class="btn-secondary" style="padding: 6px 14px; font-size: 12px; height: 32px;" onclick="setDemoCart(650.00)">Set Cart to $650 (Qualifying)</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="/integrations.html" class="btn-primary" style="display: inline-flex; width: auto; text-decoration: none;">
+          Read Full Developer Integration Guide &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Script that loads the widget -->
+    <script src="/widget.js" data-site-id="site_demo_wholesaler" defer></script>
+    <script>
+      function setDemoCart(amount) {
+        document.getElementById("demo-subtotal-val").textContent = "$" + Number(amount).toFixed(2);
+        if (window.BargainOS && window.BargainOS.updateCartTotal) {
+          window.BargainOS.updateCartTotal(amount);
+        }
+      }
+    </script>
+  </body>
+</html>

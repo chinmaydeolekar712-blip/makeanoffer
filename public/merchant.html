@@ -3,53 +3,262 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BargainOS — Merchant</title>
+    <title>BargainOS &mdash; Merchant Control Portal</title>
+    <!-- Google Fonts Trinity -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&family=Saira+Condensed:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .admin-auth-bar {
+        background: #0f172a;
+        border: 1px solid var(--hairline);
+        padding: 16px 24px;
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .admin-input-wrap {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .key-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+      .key-table th, .key-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--hairline);
+        font-family: var(--font-mono);
+        font-size: 13px;
+        text-align: left;
+      }
+      .tab-nav {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid var(--hairline);
+        margin-bottom: 28px;
+      }
+      .tab-btn {
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 12px 18px;
+        cursor: pointer;
+      }
+      .tab-btn.active {
+        color: var(--on-dark);
+        border-bottom-color: var(--on-dark);
+      }
+      .token-alert {
+        background: #064e3b;
+        border: 1px solid #059669;
+        color: #ecfdf5;
+        padding: 16px 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+      }
+    </style>
   </head>
   <body>
-    <div class="wrap">
-      <header class="topbar">
-        <div class="brand">
-          <strong>BargainOS</strong>
-          <span>Merchant dashboard</span>
-        </div>
-        <nav>
-          <a href="/">Cart</a>
-          <a class="active" href="/merchant.html">Merchant</a>
-        </nav>
-      </header>
-
-      <h1>Bargaining rules</h1>
-      <p class="lede">
-        Set the eligible-cart threshold, maximum discount, and products that must stay at full price.
-        Saved rules apply to the next customer offer immediately.
-      </p>
-
-      <div class="grid">
-        <form class="card" id="settings-form">
-          <label class="field">
-            Minimum eligible cart subtotal ($)
-            <input id="min-cart" name="minCartSubtotal" type="number" min="0" step="0.01" required />
-          </label>
-          <label class="field">
-            Maximum discount (%)
-            <input id="max-discount" name="maxDiscountPercent" type="number" min="0" max="100" step="0.01" required />
-          </label>
-          <p class="muted">Exclude products from bargaining</p>
-          <div class="exclusions" id="exclusions"></div>
-          <div class="actions">
-            <button type="submit">Save settings</button>
-          </div>
-        </form>
-
-        <aside class="card">
-          <h2>Live preview</h2>
-          <p class="muted">Based on the sample cart’s default quantities.</p>
-          <dl class="totals" id="preview"></dl>
-          <div id="save-status" class="result" hidden></div>
-        </aside>
+    <!-- Top Nav -->
+    <header class="top-nav">
+      <div class="nav-links">
+        <a class="nav-item" href="/">Overview</a>
+        <a class="nav-item" href="/for-wholesalers">Wholesalers</a>
+        <a class="nav-item" href="/integrations.html">Integrations</a>
+        <a class="nav-item" href="/widget-demo.html">Live Demo</a>
       </div>
-    </div>
+      <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; MERCHANT PORTAL</div>
+      <div class="nav-links">
+        <a class="nav-item active" href="/merchant.html">Portal</a>
+      </div>
+    </header>
+
+    <main class="page-container" style="padding-top: 32px;">
+      <!-- Minimal Secure Access Bar -->
+      <section class="admin-auth-bar">
+        <div>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;">Merchant Site ID:</span>
+          <strong style="color: #60a5fa; font-family: var(--font-mono); margin-left: 8px;" id="disp-site-id">site_demo_wholesaler</strong>
+        </div>
+        <div class="admin-input-wrap">
+          <label style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase;">Admin Secret Key:</label>
+          <input
+            type="password"
+            id="admin-secret-input"
+            class="form-control"
+            style="width: 260px; height: 36px; padding: 6px 12px; font-size: 13px;"
+            value="demo_admin_secret_key_2026"
+            placeholder="Enter Admin Secret Token"
+          />
+          <button type="button" class="btn-primary" id="btn-sync-auth" style="width: auto; height: 36px; padding: 0 16px; font-size: 11px;">
+            Authenticate
+          </button>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-rules">Store Pricing Rules</button>
+        <button class="tab-btn" data-tab="tab-keys">API Key Credentials</button>
+        <button class="tab-btn" data-tab="tab-offers">Recent Offers Log</button>
+      </div>
+
+      <!-- Tab 1: Rules & Settings -->
+      <div class="tab-content" id="tab-rules">
+        <div class="layout-grid">
+          <form class="seller-form" id="settings-form">
+            <h2 style="font-size: 22px; letter-spacing: 2px; margin-bottom: 24px;">Store Pricing Rules</h2>
+
+            <div class="form-group">
+              <label class="form-label" for="min-cart">Minimum Cart Qualification Subtotal ($)</label>
+              <input id="min-cart" name="minCartSubtotal" class="form-input-text" type="number" min="0" step="0.01" required />
+              <span class="form-hint">Shoppers cannot negotiate unless their cart subtotal reaches this wholesale volume minimum (e.g., $500.00).</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="max-discount">Maximum Acceptable Discount (%)</label>
+              <input id="max-discount" name="maxDiscountPercent" class="form-input-text" type="number" min="0" max="100" step="0.01" required />
+              <span class="form-hint">Sets the hard floor. Any customer counter-offer below this floor will be automatically rejected.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="permitted-origins">Permitted Widget Domains (CORS Whitelist)</label>
+              <input id="permitted-origins" name="permittedOrigins" class="form-input-text" type="text" placeholder='http://localhost:3000, https://yourstore.com' />
+              <span class="form-hint">Comma-separated list of web origins allowed to query this site's widget configuration.</span>
+            </div>
+
+            <div style="margin-top: 32px;">
+              <button type="submit" class="btn-primary" style="width: auto; padding: 14px 36px;">
+                Save Pricing Rules
+              </button>
+            </div>
+          </form>
+
+          <!-- Live Preview -->
+          <aside class="summary-card">
+            <h2 class="summary-title">Live Rule Simulation</h2>
+            <div class="spec-cell-list">
+              <div class="spec-cell">
+                <span class="spec-cell-label">Min Threshold</span>
+                <span class="spec-cell-val money" id="prev-threshold">$0.00</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-cell-label">Max Discount</span>
+                <span class="spec-cell-val" id="prev-discount">0%</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-cell-label">Sample Wholesale Cart</span>
+                <span class="spec-cell-val money" id="prev-sample-cart">$540.00</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-cell-label">Status</span>
+                <span class="spec-cell-val" id="prev-status">Evaluating...</span>
+              </div>
+              <div class="spec-cell" style="padding-top: 18px;">
+                <span class="spec-cell-label" style="color: var(--on-dark);">Acceptance Floor</span>
+                <span class="spec-cell-val money" id="prev-floor" style="color: var(--on-dark); font-size: 18px;">$0.00</span>
+              </div>
+            </div>
+
+            <div id="save-status" class="status-callout ok" hidden style="margin-top: 24px;">
+              <div class="status-title" id="save-status-title">Settings Saved</div>
+              <div id="save-status-text">Rules updated in database.</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Tab 2: API Keys -->
+      <div class="tab-content" id="tab-keys" style="display: none;">
+        <div class="seller-form" style="max-width: 880px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h2 style="font-size: 22px; letter-spacing: 2px; margin: 0 0 6px;">Server-to-Server API Keys</h2>
+              <p style="font-size: 14px; color: var(--muted); margin: 0;">
+                Secret keys are cryptographically hashed using SHA-256 before storage. Use these on your backend server only.
+              </p>
+            </div>
+            <button type="button" class="btn-primary" id="btn-generate-key" style="width: auto; height: 38px; padding: 0 20px; font-size: 11px;">
+              + Generate New API Key
+            </button>
+          </div>
+
+          <div id="new-key-alert" class="token-alert" style="display: none;">
+            <strong>Important:</strong> Copy your secret API key now. It will not be shown again:
+            <div style="background: rgba(0,0,0,0.5); padding: 8px 12px; margin-top: 8px; font-size: 14px; user-select: all; border-radius: 4px; word-break: break-all;" id="new-key-secret"></div>
+          </div>
+
+          <table class="key-table">
+            <thead>
+              <tr>
+                <th>Key Name</th>
+                <th>Key Prefix</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="keys-table-body">
+              <tr><td colspan="5" style="color: var(--muted);">Loading credentials...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: Recent Offers Log -->
+      <div class="tab-content" id="tab-offers" style="display: none;">
+        <div class="seller-form" style="max-width: 1040px;">
+          <h2 style="font-size: 22px; letter-spacing: 2px; margin-bottom: 8px;">Recent Offer Audit Trail</h2>
+          <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">
+            Real-time audit log of customer offers submitted against this store's pricing rules:
+          </p>
+          <div style="overflow-x: auto;">
+            <table class="key-table">
+              <thead>
+                <tr>
+                  <th>Offer ID</th>
+                  <th>Cart Total</th>
+                  <th>Proposed</th>
+                  <th>Floor</th>
+                  <th>Status</th>
+                  <th>Redeemed</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="offers-table-body">
+                <tr><td colspan="7" style="color: var(--muted);">Loading recent offers...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bugatti-footer">
+      <div class="footer-wordmark">BARGAINOS &bull; MERCHANT GOVERNANCE</div>
+      <div class="footer-copy">
+        &copy; 2026 BargainOS SaaS &middot; Multi-Tenant Database Storage &middot; SQLite Backend
+      </div>
+    </footer>
+
     <script src="/merchant.js"></script>
   </body>
 </html>

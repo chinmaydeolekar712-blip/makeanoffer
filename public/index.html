@@ -3,67 +3,437 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BargainOS — Cart</title>
+    <title>BargainOS &mdash; Automated Cart Bargaining for Online Wholesalers</title>
+    <meta
+      name="description"
+      content="Automated cart bargaining for independent online wholesalers selling packaging supplies, shipping materials, and standardized bulk goods. Enforce seller pricing rules automatically."
+    />
+    <link rel="canonical" href="https://bargainos.com/" />
+    <meta property="og:title" content="BargainOS — Automated Cart Bargaining for Online Wholesalers" />
+    <meta
+      property="og:description"
+      content="Allow qualified wholesale buyers to negotiate cart prices on bulk packaging and shipping supplies while protecting seller-defined discount limits."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bargainos.com/" />
+
+    <!-- Google Fonts Trinity (Saira Condensed, Cormorant Garamond, JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&family=Saira+Condensed:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
+
+    <!-- Structured Data (SoftwareApplication + FAQPage) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "name": "BargainOS",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "description": "Automated cart bargaining engine for independent wholesale distributors selling packaging supplies and bulk products.",
+            "offers": {
+              "@type": "Offer",
+              "price": "49.00",
+              "priceCurrency": "USD",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "49.00",
+                "priceCurrency": "USD",
+                "unitText": "MONTH"
+              }
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is BargainOS?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "BargainOS is an automated cart bargaining software for independent online wholesalers. It enables ecommerce merchants to let qualified bulk buyers propose an aggregate price for their order, with instantaneous evaluation against seller-defined pricing rules."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Who is it designed for?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It is designed specifically for independent online wholesalers and B2B distributors—particularly businesses selling packaging supplies, shipping materials, and standardized products purchased in commercial volume."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does automatic bargaining work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "When a customer's cart subtotal meets the merchant's qualifying order minimum, the customer can submit an offer. BargainOS evaluates the proposed price against the merchant's maximum discount percentage. Offers meeting the floor are accepted immediately with a time-limited token, while offers below the floor are rejected with clear feedback."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can merchants set a minimum acceptable cart price?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Merchants set both a minimum qualifying cart value (e.g. $500.00) required to unlock price proposals and a maximum allowable discount percentage (e.g. 15%) that enforces the strict floor price."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does BargainOS connect to a custom-coded ecommerce website?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "BargainOS connects via a frontend embeddable widget (/widget.js) using a public Site ID and a server-to-server REST API (/api/v1/offers) authenticated with a cryptographically hashed API key."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are Shopify and WooCommerce integrations available?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Custom-coded websites and headless platforms are fully supported today. Native plugins for Shopify and WooCommerce require specialized platform app extensions and are currently in technical development."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What happens when a customer submits an offer below the minimum?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The offer is automatically rejected with transparent feedback displaying the lowest acceptable cart total under the seller's current discount rules."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div class="wrap">
-      <header class="topbar">
-        <div class="brand">
-          <strong>BargainOS</strong>
-          <span>Customer cart prototype</span>
+    <!-- Top Navigation -->
+    <header class="top-nav">
+      <div class="nav-links">
+        <a class="nav-item active" href="/">Overview</a>
+        <a class="nav-item" href="/for-wholesalers">Wholesalers</a>
+        <a class="nav-item" href="/integrations.html">Integrations</a>
+        <a class="nav-item" href="#pricing">Pricing</a>
+        <a class="nav-item" href="#faq">FAQ</a>
+      </div>
+      <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; B2B WHOLESALE</div>
+      <div class="nav-links">
+        <a class="nav-item" href="/merchant.html">Merchant Portal</a>
+      </div>
+    </header>
+
+    <!-- Value Proposition Hero -->
+    <section class="hero-band">
+      <div class="hero-content">
+        <div class="hero-tag">B2B ECOMMERCE PRICING ENGINE</div>
+        <h1 class="hero-title" style="font-size: clamp(32px, 5.5vw, 60px);">
+          Automated Cart Bargaining for Online Wholesalers
+        </h1>
+        <p class="hero-lead" style="font-size: 19px; max-width: 68ch; margin-bottom: 24px;">
+          Allow qualified bulk buyers to propose a cart price on packaging supplies and shipping materials while automatically enforcing your minimum order values and profit margin limits.
+        </p>
+
+        <!-- Core Benefits Grid -->
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <span class="benefit-bullet">&bull;</span>
+            <span><strong>Reduce manual work:</strong> Eliminate time-consuming ad-hoc discount emails and phone calls for standard bulk orders.</span>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-bullet">&bull;</span>
+            <span><strong>Instant buyer qualification:</strong> Let wholesale purchasers negotiate and finalize orders immediately without waiting for staff.</span>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-bullet">&bull;</span>
+            <span><strong>Strict margin limits:</strong> Ensure every approved offer strictly respects your pre-programmed maximum discount floor.</span>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-bullet">&bull;</span>
+            <span><strong>Drive larger basket sizes:</strong> Motivate buyers to add items to meet your qualifying order threshold (e.g. $500.00).</span>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-bullet">&bull;</span>
+            <span><strong>Connect to your store:</strong> Integrate seamlessly with custom-coded ecommerce sites via our embeddable widget and REST API.</span>
+          </div>
         </div>
-        <nav>
-          <a class="active" href="/">Cart</a>
-          <a href="/merchant.html">Merchant</a>
-        </nav>
-      </header>
+      </div>
+    </section>
 
-      <h1>Your cart</h1>
-      <p class="lede">
-        Review items, then make an offer on the cart total. Excluded products stay at full price;
-        bargaining applies only to eligible items once the merchant threshold is met.
-      </p>
+    <!-- Main Container: Live Interactive Wholesale Cart -->
+    <main class="page-container" id="demo-cart">
+      <div style="margin-bottom: 32px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;">
+          Interactive Demonstration
+        </div>
+        <h2 style="font-size: 28px; letter-spacing: 2px; margin: 0 0 8px;">
+          Simulate Wholesale Cart Bargaining
+        </h2>
+        <p style="font-size: 15px; color: var(--muted); max-width: 70ch;">
+          Experience how a commercial customer negotiates a bulk packaging order. When the order subtotal meets the seller's $500 threshold, bargaining unlocks automatically.
+        </p>
+      </div>
 
-      <div class="grid">
-        <section class="card">
+      <!-- Threshold Specification Meter -->
+      <section class="spec-meter-container" id="threshold-card">
+        <div class="spec-meter-header">
+          <div class="spec-meter-label">SELLER WHOLESALE THRESHOLD</div>
+          <div class="spec-meter-status locked" id="threshold-badge">LOCKED</div>
+        </div>
+
+        <div class="progress-track" aria-label="Progress to unlock offer">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="spec-meter-footer">
+          <span id="threshold-text">Evaluating cart qualification status...</span>
+          <strong id="threshold-target" class="money">UNLOCK AT $500.00</strong>
+        </div>
+      </section>
+
+      <!-- Layout Grid: Table & Summary -->
+      <div class="layout-grid">
+        <!-- Products Table -->
+        <section class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Unit price</th>
-                <th>Line total</th>
+                <th style="width: 50%;">Industrial Packaging SKU</th>
+                <th style="width: 18%;">Quantity</th>
+                <th style="width: 16%;">Unit Price</th>
+                <th style="width: 16%; text-align: right;">Line Total</th>
               </tr>
             </thead>
             <tbody id="cart-body"></tbody>
           </table>
         </section>
 
-        <aside class="card">
-          <dl class="totals" id="totals"></dl>
-          <div class="actions">
-            <button id="offer-btn" type="button">Make an Offer</button>
+        <!-- Summary & Action Column -->
+        <aside class="summary-card">
+          <h2 class="summary-title">Order Subtotal</h2>
+          <dl class="spec-rows" id="totals">
+            <div class="spec-row">
+              <dt>Total SKU Units</dt>
+              <dd class="money" id="item-count">0</dd>
+            </div>
+            <div class="spec-row">
+              <dt>Catalog Price</dt>
+              <dd class="money" id="summary-subtotal">$0.00</dd>
+            </div>
+            <div class="spec-row">
+              <dt>Freight / Dispatch</dt>
+              <dd class="money">CALCULATED AT CHECKOUT</dd>
+            </div>
+            <div class="spec-row total-row">
+              <dt>Current Total</dt>
+              <dd class="money" id="summary-grand">$0.00</dd>
+            </div>
+          </dl>
+
+          <!-- Make an Offer CTA -->
+          <button id="offer-btn" class="btn-primary" type="button" disabled>
+            <span id="offer-btn-text">Locked &mdash; Min $500.00</span>
+          </button>
+
+          <!-- Status Message Callout -->
+          <div id="status" class="status-callout warn" hidden>
+            <div class="status-title" id="status-title">Notice</div>
+            <div id="status-content"></div>
           </div>
-          <div id="status" class="result" hidden></div>
         </aside>
       </div>
-    </div>
 
-    <div class="dialog-backdrop" id="offer-modal" role="dialog" aria-modal="true" aria-labelledby="offer-title">
-      <div class="card dialog">
-        <h2 id="offer-title">Make an offer</h2>
-        <p class="muted">Enter the total you want to pay for this cart, including excluded items.</p>
-        <label class="field">
-          Desired cart total ($)
-          <input id="offer-input" type="number" min="0" step="0.01" />
-        </label>
-        <div class="actions">
-          <button id="submit-offer" type="button">Submit offer</button>
-          <button id="cancel-offer" class="secondary" type="button">Cancel</button>
+      <!-- Pricing Section (Single Plan Only) -->
+      <section id="pricing" style="margin-top: 100px; padding-top: 48px; border-top: 1px solid var(--hairline);">
+        <div style="text-align: center; max-width: 680px; margin: 0 auto 40px;">
+          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;">
+            Transparent Wholesale Pricing
+          </div>
+          <h2 style="font-size: clamp(28px, 4vw, 40px); letter-spacing: 2px; margin-bottom: 12px;">
+            Simple, Predictable Subscription
+          </h2>
+          <p style="font-size: 16px; color: var(--muted);">
+            One clear plan designed for independent wholesalers. No hidden fees or transaction cuts on your negotiated revenue.
+          </p>
+        </div>
+
+        <div style="max-width: 480px; margin: 0 auto;">
+          <div class="pricing-card">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+              <h3 style="font-size: 24px; margin: 0; letter-spacing: 1.5px;">BargainOS</h3>
+              <div>
+                <span style="font-size: 36px; font-weight: 500; color: var(--on-dark); font-family: var(--font-display);">$49</span>
+                <span style="font-family: var(--font-mono); font-size: 13px; color: var(--muted);">/ month</span>
+              </div>
+            </div>
+
+            <p style="font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 24px;">
+              Complete automated cart bargaining engine for your wholesale store. Includes all current platform capabilities.
+            </p>
+
+            <ul class="pricing-features">
+              <li>Deterministic cart bargaining engine (<code>lib/bargain.js</code>)</li>
+              <li>Merchant-defined minimum qualifying cart threshold</li>
+              <li>Configurable maximum discount percentage floor protection</li>
+              <li>Embeddable frontend JavaScript widget (<code>/widget.js</code>)</li>
+              <li>Server-to-server authenticated REST API (<code>/api/v1/</code>)</li>
+              <li>Cryptographically hashed API key credentials</li>
+              <li>Offer expiry windows (30-min tokens) & single-use checkout redemption</li>
+              <li>Persistent SQLite data storage with multi-tenant isolation</li>
+              <li>CORS origin restriction for registered merchant domains</li>
+            </ul>
+
+            <div style="margin-top: 32px;">
+              <a href="/merchant.html" class="btn-primary" style="display: flex; text-decoration: none; justify-content: center;">
+                Get Started &bull; Configure Store Rules
+              </a>
+            </div>
+            <div style="text-align: center; margin-top: 12px; font-family: var(--font-mono); font-size: 11px; color: var(--muted);">
+              Instant setup &bull; No credit card required for MVP evaluation
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Accessible FAQ Section -->
+      <section id="faq" style="margin-top: 96px; padding-top: 48px; border-top: 1px solid var(--hairline);">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;">
+            Frequently Asked Questions
+          </div>
+          <h2 style="font-size: clamp(26px, 3.5vw, 36px); letter-spacing: 2px; margin-bottom: 32px;">
+            Wholesale Bargaining Questions & Answers
+          </h2>
+
+          <div class="faq-list">
+            <details class="faq-item" open>
+              <summary class="faq-question">What is BargainOS?</summary>
+              <div class="faq-answer">
+                BargainOS is software that automates cart-level price negotiation for independent online wholesale merchants. It allows business buyers to propose a custom total price for their shopping cart, which is automatically accepted or rejected based on merchant-configured profit margin rules.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Who is it designed for?</summary>
+              <div class="faq-answer">
+                BargainOS is specifically designed for independent B2B distributors and wholesalers selling standardized, repeatable bulk items—such as packaging boxes, industrial stretch wrap, sealing tape, and shipping materials—where buyers frequently request volume discounts.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">How does automatic bargaining work?</summary>
+              <div class="faq-answer">
+                When a buyer's cart subtotal reaches the merchant's required minimum threshold, the buyer can submit an offer. BargainOS evaluates the offer against the merchant's maximum allowable discount percentage. If the offer is at or above the minimum floor price, it is accepted immediately; if it is below the floor, it is rejected with clear feedback.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Can merchants set a minimum acceptable cart price?</summary>
+              <div class="faq-answer">
+                Yes. Merchants configure two key rules: a minimum cart order value (e.g. $500.00) required before bargaining unlocks, and a maximum discount percentage (e.g. 15%) that sets the hard floor price below which counter-offers are rejected.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">How does BargainOS connect to a custom-coded ecommerce website?</summary>
+              <div class="faq-answer">
+                BargainOS connects via an embeddable frontend JavaScript widget (<code>/widget.js</code>) that uses a public Site ID to show the offer interface, paired with a server-to-server REST API (<code>/api/v1/</code>) authenticated with a cryptographically hashed API key. The merchant's backend provides authoritative cart details and verifies the offer at checkout.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Are Shopify and WooCommerce integrations available?</summary>
+              <div class="faq-answer">
+                Custom-coded websites (Node.js, PHP, Python, Ruby, and headless frameworks) are fully supported today. Dedicated apps for Shopify and WooCommerce require specialized platform extension frameworks and are currently planned on our development roadmap.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">What happens when a customer submits an offer below the minimum?</summary>
+              <div class="faq-answer">
+                The offer is rejected immediately with an explanatory message showing the lowest acceptable cart total under the merchant's active rules, encouraging the buyer to adjust their counter-offer.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Make an Offer Modal Dialog -->
+    <div
+      class="dialog-backdrop"
+      id="offer-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="offer-title"
+    >
+      <div class="dialog">
+        <div class="dialog-header">
+          <h2 id="offer-title">Propose Wholesale Order Price</h2>
+          <p>Submit your proposed aggregate price for this bulk packaging order.</p>
+        </div>
+
+        <div class="modal-cart-recap">
+          <span>Catalog Order Total:</span>
+          <strong class="money" id="modal-cart-total">$0.00</strong>
+        </div>
+
+        <!-- Quick Offer Chips -->
+        <div class="quick-offers" id="quick-offers">
+          <button type="button" class="quick-btn" data-percent="5">
+            5% Discount
+            <span id="quick-5">$0.00</span>
+          </button>
+          <button type="button" class="quick-btn" data-percent="10">
+            10% Discount
+            <span id="quick-10">$0.00</span>
+          </button>
+          <button type="button" class="quick-btn" data-percent="15">
+            15% Discount
+            <span id="quick-15">$0.00</span>
+          </button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="offer-input">Proposed Total Price ($)</label>
+          <div class="currency-input-wrap">
+            <span class="currency-symbol">$</span>
+            <input
+              id="offer-input"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+            />
+          </div>
+          <div class="live-savings-hint" id="savings-hint"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="cancel-offer" class="btn-secondary" type="button">
+            Cancel
+          </button>
+          <button id="submit-offer" class="btn-primary" type="button">
+            Submit Offer
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Bugatti Pure Black Footer -->
+    <footer class="bugatti-footer">
+      <div class="footer-wordmark">BARGAINOS &bull; AUTOMATED B2B PRICING</div>
+      <div class="footer-copy">
+        &copy; 2026 BargainOS &middot; Automated Cart Bargaining for Independent Online Wholesalers &middot; Built for Packaging & Shipping Materials
+      </div>
+    </footer>
 
     <script src="/app.js"></script>
   </body>

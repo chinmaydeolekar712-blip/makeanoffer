@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Not Found &mdash; BargainOS</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .error-hero {
+        min-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 24px;
+      }
+      .error-code {
+        font-family: var(--font-display);
+        font-size: clamp(64px, 12vw, 120px);
+        letter-spacing: 6px;
+        color: var(--on-dark);
+        line-height: 1;
+        margin-bottom: 12px;
+      }
+      .error-msg {
+        font-family: var(--font-body);
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 50ch;
+        margin-bottom: 32px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="nav-links">
+        <a class="nav-item" href="/">Overview</a>
+        <a class="nav-item" href="/for-wholesalers">Wholesalers</a>
+        <a class="nav-item" href="/integrations.html">Integrations</a>
+      </div>
+      <div class="wordmark-display">BARGAINOS &nbsp;//&nbsp; 404</div>
+      <div class="nav-links">
+        <a class="nav-item" href="/merchant.html">Portal</a>
+      </div>
+    </header>
+
+    <div class="error-hero">
+      <div class="error-code">404</div>
+      <h1 style="font-size: 24px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;">
+        Page Specification Not Found
+      </h1>
+      <p class="error-msg">
+        The requested resource does not exist on this server or has been relocated. Please check the URL or return to the main wholesale catalog.
+      </p>
+      <div>
+        <a href="/" class="btn-primary" style="display: inline-flex; width: auto; padding: 12px 32px; text-decoration: none;">
+          Return to Overview
+        </a>
+      </div>
+    </div>
+
+    <footer class="bugatti-footer">
+      <div class="footer-wordmark">BARGAINOS</div>
+      <div class="footer-copy">&copy; 2026 BargainOS SaaS &middot; Status Code 404</div>
+    </footer>
+  </body>
+</html>
